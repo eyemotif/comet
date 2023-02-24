@@ -1,3 +1,4 @@
+import { AudioManager } from './audio/manager'
 import { ComponentType } from './component'
 import { Message, Response, ResponseBuilder } from './message'
 import { State } from './state'
@@ -17,9 +18,8 @@ function parse_options(url: URL): Options {
 window.onload = () => {
     const options = parse_options(new URL(window.location.href))
 
-    let state: State = {
-        connectionState: ''
-    }
+    let state = State.create()
+
     const socket = new WebSocket(`${options.hostUrl}:${options.port}`)
 
     socket.onopen = function () {

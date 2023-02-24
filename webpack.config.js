@@ -35,6 +35,10 @@ module.exports = {
                 test: /\.(ttf|otf)/i,
                 type: 'asset/resource',
             },
+            {
+                test: /\.(mp3|wav|ogg)/i,
+                type: 'asset/resource',
+            },
             tryWithModule('sass', {
                 test: /\.s[ac]ss$/i,
                 use: [
@@ -47,6 +51,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.css', '.scss'],
+        fallback: {
+            'path': require.resolve('path-browserify')
+        }
     },
     output: {
         filename: 'bundle.js',

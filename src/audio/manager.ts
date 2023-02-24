@@ -1,6 +1,4 @@
-import fs from 'fs'
 import path from 'path'
-import { Arr } from '../utils'
 
 type AudioFile = {
     name: string,
@@ -12,21 +10,26 @@ export class AudioManager {
     queue: string[][] = []
 
     constructor() {
-        for (const file of fs.readdirSync('*.*')) {
+        const context = require.context('.', true, /.*/)
+        context.keys().forEach(file => {
             const filePath = path.parse(file)
 
-            if (filePath.ext === '.ts') {
-                continue
+            console.log(filePath)
+
+            if (!(filePath.ext == '.mp3' || filePath.ext == '.wav' || filePath.ext == '.ogg')) {
+                return
             }
 
             this.files.push({
                 name: filePath.name,
-                resolvedPath: require(file),
+                resolvedPath: context(file),
             })
-        }
+        })
     }
 
     loadComponents() {
+        console.log(this.files)
+
         const container = document.getElementById('container-audio')!
         for (const file of this.files) {
             let audioTag = document.createElement('audio')
@@ -47,6 +50,10 @@ export class AudioManager {
             this.queue.push(audio)
         }
         this.queueNext()
+    }
+
+    getAudioNames(): string[] {
+        return this.files.map((file) => file.name)
     }
 
     private audioDone(name: string) {
