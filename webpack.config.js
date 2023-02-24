@@ -68,15 +68,13 @@ function tryWithModule(testModule, onOk, onError) {
         }
     }
     else {
-        let isFound = false
         for (const module of testModule) {
             try {
                 require.resolve(module)
-                isFound = true
-                break
+                return callIfFunction(onOk)
             }
             catch { }
         }
-        return callIfFunction(isFound ? onOk : onError)
+        return callIfFunction(onError)
     }
 }

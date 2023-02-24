@@ -1,5 +1,5 @@
 import { ComponentType } from './component'
-import { Message, Response } from './message'
+import { Message, Response, ResponseBuilder } from './message'
 import { State } from './state'
 
 type Options = {
@@ -26,45 +26,41 @@ window.onload = () => {
         console.log('Connected to server!')
 
         socket.onclose = function (event) {
-            console.error(`Socket closed! reason: ${event.reason}`)
+            console.error(`Socket closed! ${event.reason}`)
         }
     }
 
     socket.onmessage = function (event) {
-        const message = event.data as Message
+        const message = JSON.parse(event.data) as Message
+        console.log('INBOUND', message)
 
-        onMessage(message, state)
+        const response = onMessage(message, state)
+
+        console.log('OUTBOUND', response)
+        socket.send(JSON.stringify(response))
     }
 }
 
 function onMessage(message: Message, state: State): Response {
+    const response = new ResponseBuilder(message, state)
+
     switch (message.type) {
         case 'register':
             state.connectionState = message.payload.state
             break
         case 'get_components':
             switch (message.payload.type) {
-                case ComponentType.Audio: return {
-                    type: 'error',
-                    state: state.connectionState,
-                    is_internal: true,
-                    message: 'get_components: audio not implemented'
-                }
+                case ComponentType.Audio: return response.internalError('get_components is not implemented')
                     break
+                default: return response.error(`Invalid component type \"${(message.payload as any).type}\"`)
             }
             break
         case 'play_audio':
-            return {
-                type: 'error',
-                state: state.connectionState,
-                is_internal: true,
-                message: 'play_audio not implemented'
-            }
+            return response.internalError('play_audio is not implemented')
             break
+
+        default: return response.error(`Invalid message type \"${(message as any).type}\"`)
     }
 
-    return {
-        type: 'ok',
-        state: state.connectionState
-    }
+    return response.ok()
 }
