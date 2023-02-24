@@ -1,4 +1,4 @@
-import { ComponentType, Sound } from './component'
+import { ComponentType, Audio } from './component'
 import { State } from './state'
 
 export type Message =
@@ -20,7 +20,7 @@ export type Message =
         type: 'play_audio',
         tag: string,
         payload: {
-            data: Sound[][],
+            data: Audio[][],
         }
     }
 

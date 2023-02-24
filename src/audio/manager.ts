@@ -1,4 +1,5 @@
 import path from 'path'
+import { Audio } from '../component'
 
 type AudioFile = {
     name: string,
@@ -6,15 +7,13 @@ type AudioFile = {
 }
 
 export class AudioManager {
-    files: AudioFile[] = []
-    queue: string[][] = []
+    private files: AudioFile[] = []
+    private queue: Audio[][] = []
 
     constructor() {
         const context = require.context('.', true, /.*/)
         context.keys().forEach(file => {
             const filePath = path.parse(file)
-
-            console.log(filePath)
 
             if (!(filePath.ext == '.mp3' || filePath.ext == '.wav' || filePath.ext == '.ogg')) {
                 return
@@ -28,8 +27,6 @@ export class AudioManager {
     }
 
     loadComponents() {
-        console.log(this.files)
-
         const container = document.getElementById('container-audio')!
         for (const file of this.files) {
             let audioTag = document.createElement('audio')
@@ -43,9 +40,11 @@ export class AudioManager {
             audioTag.appendChild(sourceTag)
             container.appendChild(audioTag)
         }
+
+        console.log(`Loaded Audio: ${this.files.map(audio => audio.name).join(',')}`)
     }
 
-    playAudio(audios: string[][]) {
+    playAudio(audios: Audio[][]) {
         for (const audio of audios) {
             this.queue.push(audio)
         }
@@ -61,7 +60,7 @@ export class AudioManager {
             throw 'Queue is empty'
         }
 
-        const spotIndex = this.queue[0].indexOf(name)
+        const spotIndex = this.queue[0].findIndex((audio) => audio.name == name)
         if (spotIndex < 0) {
             throw `Audio ${name} not found in current queue spot`
         }
@@ -81,8 +80,8 @@ export class AudioManager {
             throw 'Queue is empty'
         }
 
-        for (const name of this.queue[0]) {
-            const audioElement: HTMLAudioElement = document.getElementById(`audio-${name}`)! as HTMLAudioElement
+        for (const audio of this.queue[0]) {
+            const audioElement: HTMLAudioElement = document.getElementById(`audio-${audio.name}`)! as HTMLAudioElement
             audioElement.play()
         }
     }

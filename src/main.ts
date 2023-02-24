@@ -32,7 +32,7 @@ window.onload = () => {
 
     socket.onmessage = function (event) {
         const message = JSON.parse(event.data) as Message
-        console.log('INBOUND', message)
+        console.log('INBOUND', message.payload)
 
         const response = onMessage(message, state)
 
@@ -50,13 +50,20 @@ function onMessage(message: Message, state: State): Response {
             break
         case 'get_components':
             switch (message.payload.type) {
-                case ComponentType.Audio: return response.internalError('get_components is not implemented')
-                    break
+                case ComponentType.Audio: return response.data(state.audioManager.getAudioNames().join(', '))
                 default: return response.error(`Invalid component type \"${(message.payload as any).type}\"`)
             }
-            break
         case 'play_audio':
-            return response.internalError('play_audio is not implemented')
+            const audioNames = state.audioManager.getAudioNames()
+            for (const outer of message.payload.data) {
+                for (const inner of outer) {
+                    if (!audioNames.includes(inner.name)) {
+                        return response.error(`Invalid sound: \"${inner.name}\"`)
+                    }
+                }
+            }
+
+            state.audioManager.playAudio(message.payload.data)
             break
 
         default: return response.error(`Invalid message type \"${(message as any).type}\"`)

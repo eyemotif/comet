@@ -1,4 +1,4 @@
-export type Sound = {
+export type Audio = {
     name: string
 }
 
