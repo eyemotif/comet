@@ -32,11 +32,11 @@ window.onload = () => {
 
     socket.onmessage = function (event) {
         const message = JSON.parse(event.data) as Message
-        console.log('INBOUND', message.payload)
+        console.log('INBOUND', message.type, message.payload)
 
         const response = onMessage(message, state)
 
-        console.log('OUTBOUND', response)
+        console.log('OUTBOUND', response.type, Response.inner(response))
         socket.send(JSON.stringify(response))
     }
 }

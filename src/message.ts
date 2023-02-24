@@ -87,3 +87,13 @@ export class ResponseBuilder {
         }
     }
 }
+
+export const Response = {
+    inner(response: Response) {
+        switch (response.type) {
+            case 'ok': return {}
+            case 'data': return { payload: response.payload }
+            case 'error': return { is_internal: response.is_internal, message: response.message }
+        }
+    }
+}

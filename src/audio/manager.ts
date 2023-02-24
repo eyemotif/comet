@@ -82,7 +82,8 @@ export class AudioManager {
 
         for (const audio of this.queue[0]) {
             const audioElement: HTMLAudioElement = document.getElementById(`audio-${audio.name}`)! as HTMLAudioElement
-            audioElement.play()
+
+            audioElement.play().catch(() => this.audioDone(audio.name))
         }
     }
 }
