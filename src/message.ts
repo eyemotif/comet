@@ -2,27 +2,36 @@ import { ComponentType, Audio } from './component'
 import { State } from './state'
 
 export type Message =
-    | {
+    ({
         type: 'register',
-        tag: string,
         payload: {
             state: string,
         }
     }
-    | {
-        type: 'get_components',
-        tag: string,
-        payload: {
-            type: ComponentType,
+        | {
+            type: 'get_components',
+            payload: {
+                type: ComponentType,
+            }
         }
-    }
-    | {
-        type: 'play_audio',
-        tag: string,
-        payload: {
-            data: Audio[][],
+        | {
+            type: 'play_audio',
+            payload: {
+                data: Audio[][],
+            }
         }
-    }
+        | {
+            type: 'audio_volume',
+            payload: {
+                name: string,
+                value: number,
+            }
+        }
+        | {
+            type: 'audio_clear',
+            payload: {}
+        }
+    ) & { tag: string }
 
 export type Response =
     | {

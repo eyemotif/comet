@@ -1,5 +1,6 @@
 import path from 'path'
 import { Audio } from '../component'
+import { Option } from '../utils'
 
 type AudioFile = {
     name: string,
@@ -53,6 +54,18 @@ export class AudioManager {
 
     getAudioNames(): string[] {
         return this.files.map((file) => file.name)
+    }
+
+    getTagByName(name: string): Option<HTMLAudioElement> {
+        const element: any = document.getElementById(`audio-${name}`)
+        return Option.map(Option.fromNullable(element), el => el as HTMLAudioElement)
+    }
+
+    clearQueue() {
+        if (this.queue.length === 0) {
+            return
+        }
+        this.queue = [this.queue[0]]
     }
 
     private audioDone(name: string) {

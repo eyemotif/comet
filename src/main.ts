@@ -65,6 +65,16 @@ function onMessage(message: Message, state: State): Response {
 
             state.audioManager.playAudio(message.payload.data)
             break
+        case 'audio_volume':
+            const tag = state.audioManager.getTagByName(message.payload.name)
+            if (!tag.IsSome) {
+                return response.error(`Invalid sound: \"${message.payload.name}\"`)
+            }
+            tag.Value.volume = message.payload.value
+            break
+        case 'audio_clear':
+            state.audioManager.clearQueue()
+            break
 
         default: return response.error(`Invalid message type \"${(message as any).type}\"`)
     }

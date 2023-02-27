@@ -94,6 +94,10 @@ export const Option = {
         if (maybe === undefined) return Option.none()
         else return Option.some(maybe)
     },
+    fromNullable: <T>(nullable: T | null): Option<T> => {
+        if (nullable === null) return Option.none()
+        else return Option.some(nullable)
+    }
 }
 
 export const Arr = {
