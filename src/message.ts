@@ -1,5 +1,5 @@
-import { ComponentType, Audio } from './component'
-import { State } from './state'
+import { ComponentType, Audio, Chat } from './component'
+import { Chatter, State } from './state'
 
 export type Message =
     ({
@@ -29,6 +29,31 @@ export type Message =
         }
         | {
             type: 'audio_clear',
+            payload: {}
+        }
+        | {
+            type: 'chat_set_emotes',
+            payload: {
+                username: string,
+            }
+        }
+        | {
+            type: 'chat',
+            payload: {
+                user_id: string,
+                chat: Chat[],
+            }
+        }
+        | {
+            type: 'chat_user',
+            payload: {
+                user_id: string,
+                chat_info: Chatter
+            },
+
+        }
+        | {
+            type: 'features',
             payload: {}
         }
     ) & { tag: string }

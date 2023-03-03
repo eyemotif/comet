@@ -8,17 +8,18 @@ type Options = {
     port: string,
 }
 
-function parse_options(url: URL): Options {
+function parseOptions(url: URL): Options {
     return {
-        hostUrl: url.searchParams.get('hosturl') ?? 'ws://localhost',
+        hostUrl: url.searchParams.get('hosturl') ?? 'ws://' + url.hostname,
         port: url.searchParams.get('port') ?? '8000',
     }
 }
 
 window.onload = () => {
-    const options = parse_options(new URL(window.location.href))
+    const options = parseOptions(new URL(window.location.href))
 
     let state = State.create()
+    state.chatManager.setState(state)
 
     const socket = new WebSocket(`${options.hostUrl}:${options.port}`)
 
@@ -30,18 +31,18 @@ window.onload = () => {
         }
     }
 
-    socket.onmessage = function (event) {
+    socket.onmessage = async function (event) {
         const message = JSON.parse(event.data) as Message
         console.log('INBOUND', message.type, message.payload)
 
-        const response = onMessage(message, state)
+        const response = await onMessage(message, state)
 
         console.log('OUTBOUND', response.type, Response.inner(response))
         socket.send(JSON.stringify(response))
     }
 }
 
-function onMessage(message: Message, state: State): Response {
+async function onMessage(message: Message, state: State): Promise<Response> {
     const response = new ResponseBuilder(message, state)
 
     switch (message.type) {
@@ -75,6 +76,24 @@ function onMessage(message: Message, state: State): Response {
         case 'audio_clear':
             state.audioManager.clearQueue()
             break
+
+        case 'chat_set_emotes':
+            const setEmotesResult = await state.chatManager.setEmotes(message.payload.username)
+            if (!setEmotesResult.IsOk) {
+                return response.internalError(setEmotesResult.Error)
+            }
+            break
+        case 'chat':
+            const chatResult = state.chatManager.chat(message.payload.user_id, message.payload.chat)
+            if (!chatResult.IsOk) {
+                return response.data(chatResult.Error)
+            }
+            break
+        case 'chat_user':
+            state.chatters[message.payload.user_id] = message.payload.chat_info
+            break
+        case 'features':
+            return response.data(JSON.stringify(state.features))
 
         default: return response.error(`Invalid message type \"${(message as any).type}\"`)
     }
