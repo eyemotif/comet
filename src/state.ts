@@ -8,6 +8,7 @@ export type State = {
     chatManager: ChatManager,
     chatters: Record<string, Chatter>
     features: Feature[]
+    cachedEmotes: Record<string, string>,
 }
 
 export type Chatter = {
@@ -27,6 +28,7 @@ export const State = {
             chatManager: new ChatManager(),
             chatters: {},
             features: getFeatures(),
+            cachedEmotes: {},
         }
     }
 }

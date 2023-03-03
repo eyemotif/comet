@@ -8,7 +8,7 @@ export type Chat =
     }
     | {
         type: 'emote',
-        url: string,
+        emote: string,
     }
 
 export enum ComponentType {

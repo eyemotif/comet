@@ -1,4 +1,5 @@
-import { AudioManager } from './audio/manager'
+import './styles/styles'
+
 import { ComponentType } from './component'
 import { Message, Response, ResponseBuilder } from './message'
 import { State } from './state'
@@ -84,7 +85,7 @@ async function onMessage(message: Message, state: State): Promise<Response> {
             }
             break
         case 'chat':
-            const chatResult = state.chatManager.chat(message.payload.user_id, message.payload.chat)
+            const chatResult = await state.chatManager.chat(message.payload.user_id, message.payload.chat)
             if (!chatResult.IsOk) {
                 return response.data(chatResult.Error)
             }

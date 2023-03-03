@@ -1,6 +1,7 @@
 import { Chat } from '../component'
 import { Chatter, State } from '../state'
 import { delay, Result } from '../utils'
+import { chatMessageToHtml } from './builder'
 
 type EmoteResponse = {
     provider: number
@@ -9,7 +10,6 @@ type EmoteResponse = {
 }
 
 export class ChatManager {
-    private history: string[] = []
     private channelEmotes: Record<string, string> = {}
     private state: State | undefined = undefined
 
@@ -17,13 +17,23 @@ export class ChatManager {
         this.state = state
     }
 
-    chat(userId: string, chat: Chat[]): Result<void, string> {
+    async chat(userId: string, chat: Chat[]): Promise<Result<void, string>> {
         if (this.state === undefined) throw `State never set`
+
 
         const chatter = this.state.chatters[userId]
         if (chatter === undefined) {
             return Result.error(userId)
         }
+
+        const chatDiv = document.getElementById('container-chat')!
+
+        const chatP = document.createElement('p')
+        chatP.className = 'chat'
+        chatP.innerHTML += await chatMessageToHtml(chatter, chat, this.channelEmotes, this.state)
+
+        chatDiv.appendChild(chatP)
+        chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
 
         return Result.ok(void 0)
     }
@@ -87,12 +97,4 @@ export class ChatManager {
 
         return Result.ok(result)
     }
-
-
-    chatMessageToHtml(chatter: Chatter,
-        chat: Chat[],): Result<string, string> {
-
-        return Result.error('TODO')
-    }
-
 }

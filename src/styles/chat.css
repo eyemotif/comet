@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Asap:wght@700&display=swap');
+
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+#container-chat {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+
+    font-family: 'Asap';
+    color: white;
+    text-shadow: 0.25rem 0.25rem black;
+    font-size: 3rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.chat {
+    margin: 0.5rem;
+    min-height: 4.5rem;
+}
+
+.chat img {
+    vertical-align: middle;
+    max-height: 4rem;
+    width: auto
+}
+
+.emoji {
+    height: 3rem;
+}
+
+.badge {
+    padding: 0.25rem;
+    height: 2.5rem;
+}
