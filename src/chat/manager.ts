@@ -29,13 +29,24 @@ export class ChatManager {
         const chatDiv = document.getElementById('container-chat')!
 
         const chatP = document.createElement('p')
-        chatP.className = 'chat'
+        chatP.classList.add('chat', `chat-user-${userId}`)
         chatP.innerHTML += await chatMessageToHtml(chatter, chat, this.channelEmotes, this.state)
 
         chatDiv.appendChild(chatP)
         chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
 
         return Result.ok(void 0)
+    }
+
+    clearChat() {
+        const chatDiv = document.getElementById('container-chat')!
+        while (chatDiv.lastChild) {
+            chatDiv.removeChild(chatDiv.lastChild)
+        }
+    }
+    clearUserChat(userId: string) {
+        const chatDiv = document.getElementById('container-chat')!
+        document.querySelectorAll(`.chat-user-${userId}`).forEach(node => chatDiv.removeChild(node))
     }
 
     async setEmotes(channel: string): Promise<Result<void, string>> {

@@ -44,15 +44,12 @@ function htmlEscape(text: string): string {
 }
 
 function escapeChannelEmotes(content: string, channelEmotes: Record<string, string>): InternalChat[] {
-    console.warn(channelEmotes)
-
     let output: InternalChat[] = []
     let currentWord = ''
 
     for (const chr of content) {
         switch (chr) {
             case ' ':
-                console.log(`check emote "${currentWord}"`)
                 if (channelEmotes[currentWord] !== undefined) {
                     output.push({ type: 'internalEmote', url: channelEmotes[currentWord] })
                 } else {

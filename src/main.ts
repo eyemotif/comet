@@ -95,6 +95,13 @@ async function onMessage(message: Message, state: State): Promise<Response> {
             break
         case 'features':
             return response.data(JSON.stringify(state.features))
+        case 'chat_clear':
+            if (message.payload.user_id === null) {
+                state.chatManager.clearChat()
+            } else {
+                state.chatManager.clearUserChat(message.payload.user_id)
+            }
+            break
 
         default: return response.error(`Invalid message type \"${(message as any).type}\"`)
     }

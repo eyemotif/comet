@@ -50,11 +50,16 @@ export type Message =
                 user_id: string,
                 chat_info: Chatter
             },
-
         }
         | {
             type: 'features',
             payload: {}
+        }
+        | {
+            type: 'chat_clear',
+            payload: {
+                user_id: string | null
+            }
         }
     ) & { tag: string }
 
