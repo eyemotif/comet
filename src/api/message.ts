@@ -117,6 +117,7 @@ export class ResponseBuilder {
         }
     }
     internalError(message: string): Response {
+        console.error(message)
         return {
             type: 'error',
             tag: this.msg.tag,

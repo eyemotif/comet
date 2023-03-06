@@ -10,7 +10,8 @@ export async function chatMessageToHtml(chatter: Chatter, message: Chat[], chann
         output += `<img class="badge" src="${badgeUrl}"></img>`
     }
 
-    output += `<span style="color:${chatter.nameColor}">${chatter.displayName}</span>: `
+    output += `<span style="color:${chatter.nameColor}">${chatter.displayName}</span>:&nbsp;`
+    output += '<span class="message">'
 
     for (const chat of message) {
         switch (chat.type) {
@@ -34,7 +35,7 @@ export async function chatMessageToHtml(chatter: Chatter, message: Chat[], chann
         }
     }
 
-    return output
+    return output + '</span>'
 }
 
 function htmlEscape(text: string): string {

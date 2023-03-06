@@ -3,6 +3,7 @@ import './styles/styles'
 import { ComponentType } from './api/component'
 import { Message, Response, ResponseBuilder } from './api/message'
 import { State } from './state'
+import { showError } from './error'
 
 type Options = {
     hostUrl: string,
@@ -24,11 +25,16 @@ window.onload = () => {
 
     const socket = new WebSocket(`${options.hostUrl}:${options.port}`)
 
+    socket.onerror = function () {
+        showError('Connection error!')
+    }
+
     socket.onopen = function () {
         console.log('Connected to server!')
 
         socket.onclose = function (event) {
             console.error(`Socket closed! ${event.reason}`)
+            showError(`Socket closed! ${event.reason}`)
         }
     }
 

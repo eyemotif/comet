@@ -17,6 +17,7 @@ body {
 
     display: flex;
     flex-direction: column;
+    white-space: nowrap;
 }
 
 .chat {
@@ -28,6 +29,11 @@ body {
     vertical-align: middle;
     max-height: 4rem;
     width: auto
+}
+
+.chat .message {
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .emoji {
