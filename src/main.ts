@@ -91,7 +91,7 @@ async function onMessage(message: Message, state: State): Promise<Response> {
             }
             break
         case 'chat':
-            const chatResult = await state.chatManager.chat(message.payload.user_id, message.payload.chat, message.payload.meta)
+            const chatResult = state.chatManager.chat(message.payload.user_id, message.payload.chat, message.payload.meta)
             if (!chatResult.IsOk) {
                 return response.data(chatResult.Error)
             }

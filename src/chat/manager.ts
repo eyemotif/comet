@@ -1,5 +1,5 @@
 import { Chat, ChatMetadata } from '../api/component'
-import { State } from '../state'
+import { Chatter, State } from '../state'
 import { delay, Result } from '../utils'
 import { chatMessageToHtml } from './builder'
 import twemoji from 'twemoji'
@@ -18,38 +18,23 @@ export class ChatManager {
         this.state = state
     }
 
-    async chat(userId: string, chat: Chat[], meta: ChatMetadata): Promise<Result<void, string>> {
+    chat(userId: string, chat: Chat[], meta: ChatMetadata): Result<void, string> {
         if (this.state === undefined) throw `State never set`
-
 
         const chatter = this.state.chatters[userId]
         if (chatter === undefined) {
             return Result.error(userId)
         }
 
-        const chatDiv = document.getElementById('container-chat')!
+        /*
+            The work to build the HTML is kinda slow. Luckily, all the
+            data-/type-checking is already done at this point. So, we can just
+            shove it in an async function and keep the response time low.
 
-        const chatP = document.createElement('p')
-        chatP.classList.add('chat', `chat-user-${userId}`)
-        chatP.innerHTML += await chatMessageToHtml(
-            chatter,
-            chat,
-            meta,
-            this.channelEmotes,
-            this.state
-        )
-
-        switch (meta) {
-            case ChatMetadata.Action:
-                chatP.classList.add('chat-action')
-                break
-            default: break
-        }
-
-        twemoji.parse(chatP)
-
-        chatDiv.appendChild(chatP)
-        chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
+            All the "this" calls going into this function are reads to things
+            that are only set once, so this is thread-safe (I think).
+        */
+        this.buildChat(userId, chat, meta, chatter, this.state)
 
         return Result.ok(void 0)
     }
@@ -84,6 +69,32 @@ export class ChatManager {
         }
 
         return Result.ok(void 0)
+    }
+
+    private async buildChat(userId: string, chat: Chat[], meta: ChatMetadata, chatter: Chatter, state: State) {
+        const chatDiv = document.getElementById('container-chat')!
+
+        const chatP = document.createElement('p')
+        chatP.classList.add('chat', `chat-user-${userId}`)
+        chatP.innerHTML += await chatMessageToHtml(
+            chatter,
+            chat,
+            meta,
+            this.channelEmotes,
+            state
+        )
+
+        switch (meta) {
+            case ChatMetadata.Action:
+                chatP.classList.add('chat-action')
+                break
+            default: break
+        }
+
+        twemoji.parse(chatP)
+
+        chatDiv.appendChild(chatP)
+        chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
     }
 
     private async getEmotesFrom(url: string): Promise<Result<Record<string, string>, string>> {
