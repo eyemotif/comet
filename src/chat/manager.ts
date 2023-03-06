@@ -1,7 +1,8 @@
 import { Chat, ChatMetadata } from '../api/component'
-import { Chatter, State } from '../state'
+import { State } from '../state'
 import { delay, Result } from '../utils'
 import { chatMessageToHtml } from './builder'
+import twemoji from 'twemoji'
 
 type EmoteResponse = {
     provider: number
@@ -44,6 +45,8 @@ export class ChatManager {
                 break
             default: break
         }
+
+        twemoji.parse(chatP)
 
         chatDiv.appendChild(chatP)
         chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
