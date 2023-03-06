@@ -1,5 +1,5 @@
 import path from 'path'
-import { Audio } from '../component'
+import { Audio } from '../api/component'
 import { Option } from '../utils'
 
 type AudioFile = {

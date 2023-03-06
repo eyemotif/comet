@@ -1,4 +1,4 @@
-import { Chat } from '../component'
+import { Chat } from '../api/component'
 import { Chatter, State } from '../state'
 import { delay, Result } from '../utils'
 import { chatMessageToHtml } from './builder'

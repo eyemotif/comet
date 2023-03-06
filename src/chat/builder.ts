@@ -1,4 +1,4 @@
-import { Chat } from '../component'
+import { Chat } from '../api/component'
 import { Chatter, State } from '../state'
 
 type InternalChat = { type: 'internalChat', content: string } | { type: 'internalEmote', url: string }

@@ -1,5 +1,5 @@
 import { ComponentType, Audio, Chat } from './component'
-import { Chatter, State } from './state'
+import { Chatter, State } from '../state'
 
 export type Message =
     ({

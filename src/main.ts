@@ -1,7 +1,7 @@
 import './styles/styles'
 
-import { ComponentType } from './component'
-import { Message, Response, ResponseBuilder } from './message'
+import { ComponentType } from './api/component'
+import { Message, Response, ResponseBuilder } from './api/message'
 import { State } from './state'
 
 type Options = {

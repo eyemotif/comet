@@ -1,6 +1,6 @@
 import { AudioManager } from './audio/manager'
 import { ChatManager } from './chat/manager'
-import { Feature } from './features'
+import { Feature } from './api/features'
 
 export type State = {
     connectionState: string,
