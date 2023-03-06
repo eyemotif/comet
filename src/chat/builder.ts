@@ -1,16 +1,17 @@
-import { Chat } from '../api/component'
+import { Chat, ChatMetadata } from '../api/component'
 import { Chatter, State } from '../state'
 
 type InternalChat = { type: 'internalChat', content: string } | { type: 'internalEmote', url: string }
 
-export async function chatMessageToHtml(chatter: Chatter, message: Chat[], channelEmotes: Record<string, string>, state: State): Promise<string> {
+export async function chatMessageToHtml(chatter: Chatter, message: Chat[], meta: ChatMetadata, channelEmotes: Record<string, string>, state: State): Promise<string> {
     let output = ''
 
     for (const badgeUrl of chatter.badges) {
         output += `<img class="badge" src="${badgeUrl}"></img>`
     }
 
-    output += `<span style="color:${chatter.nameColor}">${chatter.displayName}</span>:&nbsp;`
+    output += `<span style="color:${chatter.nameColor}">${chatter.displayName}</span>`
+    output += `${nameSeperator(meta)}&nbsp;`
     output += '<span class="message">'
 
     for (const chat of message) {
@@ -36,6 +37,13 @@ export async function chatMessageToHtml(chatter: Chatter, message: Chat[], chann
     }
 
     return output + '</span>'
+}
+
+function nameSeperator(meta: ChatMetadata): string {
+    switch (meta) {
+        case ChatMetadata.None: return ':'
+        case ChatMetadata.Action: return ''
+    }
 }
 
 function htmlEscape(text: string): string {

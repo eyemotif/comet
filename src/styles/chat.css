@@ -25,6 +25,10 @@ body {
     min-height: 4.5rem;
 }
 
+.chat-action {
+    font-style: oblique;
+}
+
 .chat img {
     vertical-align: middle;
     max-height: 4rem;

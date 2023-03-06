@@ -1,4 +1,4 @@
-import { ComponentType, Audio, Chat } from './component'
+import { ComponentType, Audio, Chat, ChatMetadata } from './component'
 import { Chatter, State } from '../state'
 
 export type Message =
@@ -42,6 +42,7 @@ export type Message =
             payload: {
                 user_id: string,
                 chat: Chat[],
+                meta: ChatMetadata
             }
         }
         | {

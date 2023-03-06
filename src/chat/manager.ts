@@ -1,4 +1,4 @@
-import { Chat } from '../api/component'
+import { Chat, ChatMetadata } from '../api/component'
 import { Chatter, State } from '../state'
 import { delay, Result } from '../utils'
 import { chatMessageToHtml } from './builder'
@@ -17,7 +17,7 @@ export class ChatManager {
         this.state = state
     }
 
-    async chat(userId: string, chat: Chat[]): Promise<Result<void, string>> {
+    async chat(userId: string, chat: Chat[], meta: ChatMetadata): Promise<Result<void, string>> {
         if (this.state === undefined) throw `State never set`
 
 
@@ -30,7 +30,20 @@ export class ChatManager {
 
         const chatP = document.createElement('p')
         chatP.classList.add('chat', `chat-user-${userId}`)
-        chatP.innerHTML += await chatMessageToHtml(chatter, chat, this.channelEmotes, this.state)
+        chatP.innerHTML += await chatMessageToHtml(
+            chatter,
+            chat,
+            meta,
+            this.channelEmotes,
+            this.state
+        )
+
+        switch (meta) {
+            case ChatMetadata.Action:
+                chatP.classList.add('chat-action')
+                break
+            default: break
+        }
 
         chatDiv.appendChild(chatP)
         chatDiv.childNodes.forEach((el: any) => { if (el.getBoundingClientRect().y < 0) chatDiv.removeChild(el) })
