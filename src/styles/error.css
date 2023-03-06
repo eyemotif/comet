@@ -4,4 +4,6 @@
     text-shadow: 0.1rem 0.1rem black;
     font-size: 3rem;
     font-family: monospace;
+    z-index: 10;
+    position: fixed
 }
