@@ -35,16 +35,20 @@ body {
     width: auto
 }
 
+.chat .name {
+    padding-right: 0.05em;
+}
+
 .chat .message {
     overflow-wrap: break-word;
     white-space: normal;
 }
 
-.emoji {
+.chat .emoji {
     height: 3rem;
 }
 
-.badge {
+.chat .badge {
     padding: 0.25rem;
     height: 2.5rem;
 }

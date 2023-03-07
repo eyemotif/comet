@@ -68,6 +68,8 @@ export class ChatManager {
             this.channelEmotes[k] = channelEmotes.Ok[k]
         }
 
+        console.log(`Loaded ${Object.keys(this.channelEmotes).length} emotes!`)
+
         return Result.ok(void 0)
     }
 

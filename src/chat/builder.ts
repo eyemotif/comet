@@ -10,7 +10,7 @@ export async function chatMessageToHtml(chatter: Chatter, message: Chat[], meta:
         output += `<img class="badge" src="${badgeUrl}"></img>`
     }
 
-    output += `<span style="color:${chatter.nameColor}">${chatter.displayName}</span>`
+    output += `<span class="name" style="color:${chatter.nameColor}">${chatter.displayName}</span>`
     output += `${nameSeperator(meta)}&nbsp;`
     output += '<span class="message">'
 

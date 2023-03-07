@@ -17,5 +17,4 @@ export enum ChatMetadata {
 
 export enum ComponentType {
     Audio = 'audio',
-    Chat = 'chat'
 }
